@@ -35,5 +35,6 @@ public:
 
 private:
 	std::map<std::string, sf::Texture*> textureMap;
+	sf::Texture *texNotFound;
 };
 

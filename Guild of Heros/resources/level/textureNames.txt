@@ -2,3 +2,4 @@ crate resources/textures/crate.png
 rock resources/textures/newRock.png
 floor resources/textures/sandFloorTile.png
 player resources/textures/doctorWho.png
+enemy resources/textures/elementalFire0.png

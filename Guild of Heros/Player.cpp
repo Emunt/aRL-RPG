@@ -1,7 +1,7 @@
 #include "Player.h"
 
 
-Player::Player(sf::Texture *tex, int x, int y)
+Player::Player(sf::Texture *tex, int x, int y) : Entity(tex, x, y)
 {
 	setTexture(tex);
 	setPosition(x, y);
@@ -13,40 +13,13 @@ Player::~Player()
 {
 }
 
-void Player::setLevel(Level *level_)
-{
-	level = level_;
-}
 
-void Player::setTexture(sf::Texture *tex)
+bool Player::update(long dt)
 {
-	sprite.setTexture(*tex);
-}
-
-void Player::setPosition(int x_, int y_)
-{
-	x = x_;
-	y = y_;
-
-	sprite.setPosition(x * 32, y * 32);
-}
-
-sf::Vector2i Player::getPosition()
-{
-	return sf::Vector2i(x, y);
-}
-
-sf::Vector2f Player::getWindowPosition()
-{
-	return sf::Vector2f(x*32, y*32);
-}
-
-void Player::update(long dt)
-{
-	if (!level) return;
+	if (!level) return false;
 	timeSinceUpdate += dt;
 
-	if (timeSinceUpdate < 100) return;
+	if (timeSinceUpdate < 100) return false;
 	timeSinceUpdate = 0;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && level->isPassable(x - 1, y))
@@ -65,11 +38,11 @@ void Player::update(long dt)
 	{
 		y++;
 	}
+	else {
+		return false;
+	}
 
 	sprite.setPosition(x * 32, y * 32);
-}
 
-void Player::render(sf::RenderWindow &window)
-{
-	window.draw(sprite);
+	return true;
 }

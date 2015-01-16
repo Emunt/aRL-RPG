@@ -2,6 +2,11 @@
 #include "Level.h"
 #include "TexturePool.h"
 #include "Player.h"
+#include "BasicEnemy.h"
+#include "Entity.h"
+
+#include <vector>
+
 int main()
 {
 	int height = 1024, width = 1024;
@@ -19,6 +24,13 @@ int main()
 	Player p(texPool.get("player"), 1, 1);
 	p.setLevel(level);
 	
+	std::vector<Entity*> enemyVec;
+	for (int i = 0; i < 5; i++) {
+		Entity *e = new BasicEnemy(texPool.get("enemy"), 1, 1);
+		e->setLevel(level);
+		enemyVec.push_back(e);
+	}
+
 	sf::View view;
 	view.setSize(width/2, height/2);
 	view.setCenter(p.getWindowPosition());
@@ -42,14 +54,24 @@ int main()
 		long dt = currentTime - prevTime;
 		prevTime = currentTime;
 
-		p.update(dt);
+		bool status = p.update(dt);
 		view.setCenter(p.getWindowPosition());
+		if (status) {
+			for (int i = 0; i < enemyVec.size(); i++) {
+				enemyVec[i]->update(dt);
+			}
+		}
+
+		
 		//Render
 
 		window.setView(view);
 
 		window.clear();
 		level->render(window);
+		for (int i = 0; i < enemyVec.size(); i++) {
+			enemyVec[i]->render(window);
+		}
 		p.render(window);
 		window.display();
 	}
